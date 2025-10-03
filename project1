@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <math.h>
+ 
+ double max( double a, double b, double c){
+     double m = a;
+     if(b > m) m = b;
+     if(c > m) m = c;
+     return m;
+ }
+ int main() {
+    double xn = 1, xk = 2, hx = 0.5;
+    double an = 0.3, ak = 0.7, ha = 0.4/3;
+    printf("a\\x\t\t1\t\t\t1.5\t\t\t2\n");
+    
+    for( double a = an; a<= ak + 1e-9; a += ha){
+        printf("%.5f\t\t",a);
+        for( double x = xn; x<= xk + 1e-9; x += hx){
+            double f1 = 3 * atan(a * x);
+            double f2 = sqrt( (a * a) + (x * x) );
+            double f3 = acos(a + (x/10));
+            double f = max( f1, f2, f3);
+            printf("%.9f\t\t",f);
+        }
+        printf("\n");
+    }
+    return  0;
+ }
