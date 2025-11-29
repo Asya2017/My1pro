@@ -3,18 +3,18 @@
 
 int main(int argc, char **argv) {
     if (argc < 2) {
-        printf("Ошибка: укажите имя файла\n");
+        printf("Ошибка: имя файла\n");
         printf("Использование: %s <filename>\n", argv[0]);
         return 1;
     }
     FILE *f = fopen(argv[1], "r");
     if (file == NULL) {
-        printf("Ошибка: не удалось открыть файл '%s'\n", argv[1]);
+        printf("Ошибка: не удалось открыть '%s'\n", argv[1]);
         return 1;
     }
     int A, B;
     if (fscanf(file, "%d %d", &A, &B) != 2) {
-        printf("Ошибка: неверный формат данных в файле\n");
+        printf("Ошибка: неверный формат данных\n");
         fclose(file);
         return 1;
     }
@@ -24,15 +24,15 @@ int main(int argc, char **argv) {
         return 1;
     }
     int **mat = malloc(A * sizeof(int*));
-    if (matrix == NULL) {
-        printf("Ошибка: не удалось выделить память для матрицы\n");
+    if (mat == NULL) {
+        printf("Ошибка: не удалось выделить память\n");
         fclose(file);
         return 1;
     }
     for (int i = 0; i < A; i++)
         mat[i] = malloc(B * sizeof(int));
         if (mat[i] == NULL) {
-            printf("Ошибка: не удалось выделить память для строки %d\n", i);
+            printf("Ошибка: не удалось выделить память %d\n", i);
             for (int j = 0; j < i; j++) {
                 free(mat[j]);
             }
