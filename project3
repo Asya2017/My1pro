@@ -1,33 +1,66 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 int main(int argc, char **argv) {
-    FILE *file = fopen(argv[1], "r");
+    if (argc < 2) {
+        printf("Ошибка: укажите имя файла\n");
+        printf("Использование: %s <filename>\n", argv[0]);
+        return 1;
+    }
+    FILE *f = fopen(argv[1], "r");
+    if (file == NULL) {
+        printf("Ошибка: не удалось открыть файл '%s'\n", argv[1]);
+        return 1;
+    }
     int A, B;
-    fscanf(file, "%d %d", &A, &B);
-    
-    int **matrix = malloc(A * sizeof(int*));
+    if (fscanf(file, "%d %d", &A, &B) != 2) {
+        printf("Ошибка: неверный формат данных в файле\n");
+        fclose(file);
+        return 1;
+    }
+    if (A <= 0 || B <= 0) {
+        printf("Ошибка: неверные размеры матрицы %dx%d\n", A, B);
+        fclose(file);
+        return 1;
+    }
+    int **mat = malloc(A * sizeof(int*));
+    if (matrix == NULL) {
+        printf("Ошибка: не удалось выделить память для матрицы\n");
+        fclose(file);
+        return 1;
+    }
     for (int i = 0; i < A; i++)
-        matrix[i] = malloc(B * sizeof(int));
+        mat[i] = malloc(B * sizeof(int));
+        if (matrix[i] == NULL) {
+            printf("Ошибка: не удалось выделить память для строки %d\n", i);
+            for (int j = 0; j < i; j++) {
+                free(matrix[j]);
+            }
+            free(matrix);
+            fclose(file);
+            return 1;
+        }
+    }
     
     for (int i = 0; i < A; i++)
         for (int j = 0; j < B; j++)
-            fscanf(file, "%d", &matrix[i][j]);
+            fscanf(file, "%d", &mat[i][j]);
     fclose(file);
     
     int S = 0;
     for (int i = 0; i < (A < B ? A : B); i++)
-        S += matrix[i][i];
+        S += mat[i][i];
   
     if (A >= 3) {
-        int max_idx = 0;
+        int max_i = 0;
         for (int j = 1; j < B; j++)
-            if (matrix[2][j] > matrix[2][max_idx])
-                max_idx = j;
-        matrix[2][max_idx] = S;
+            if (mat[2][j] > mat[2][max_i])
+                max_i = j;
+        mat[2][max_i] = S;
     }
 
     for (int i = 0; i < A; i++)
-        free(matrix[i]);
-    free(matrix);
+        free(mat[i]);
+    free(mat);
     return 0;
 }
