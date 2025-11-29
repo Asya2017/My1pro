@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <time.h>
+
+void copy(int *a, int *b, int x) {
+    for (int i = 0; i < x; i++) b[i] = a[i];
+}
+
+void bub(int *a, int x) {
+    for (int i = 0; i < x - 1; i++)
+        for (int j = 0; j < x - i - 1; j++)
+            if (a[j] > a[j + 1]) {
+                int t = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = t;
+            }
+}
+
+void sel(int *a, int x) {
+    for (int i = 0; i < x - 1; i++) {
+        int min = i;
+        for (int j = i + 1; j < n; j++)
+            if (a[j] < a[min]) min = j;
+        if (min != i) {
+            int t = a[i];
+            a[i] = a[min];
+            a[min] = t;
+        }
+    }
+}
+
+void q(int *a, int ll, int h) {
+    if (ll < h) {
+        int p = a[h];
+        int i = ll - 1;
+        for (int j = ll; j < h; j++)
+            if (a[j] < p) {
+                i++;
+                int t = a[i];
+                a[i] = a[j];
+                a[j] = t;
+            }
+        
+        int t = a[i + 1];
+        a[i + 1] = a[h];
+        a[h] = t;
+        
+        int mid = i + 1;
+        q(a, ll, mid - 1);
+        q(a, mid + 1, h);
+    }
+}
+
+double get_time(int *arr, int x, int type) {
+    int *tmp = malloc(x * sizeof(int));
+    copy(arr, tmp, x);
+    
+    clock_t start = clock();
+    if (type == 1) bub(tmp, x);
+    else if (type == 2) sel(tmp, x);
+    else q(tmp, 0, n - 1);
+    clock_t end = clock();
+    
+    free(tmp);
+    return (double)(end - start) / CLOCKS_PER_SEC;
+}
+
+int main() {
+    srand(time(NULL));
+    
+    int sizes[] = {10, 1000, 10000, 100000};
+    
+    printf("N\tBub\tSel\tQ\n");
+    
+    for (int i = 0; i < 4; i++) {
+        int x = sizes[i];
+        int *arr = malloc(x * sizeof(int));
+        
+        for (int j = 0; j < x; j++)
+            arr[j] = rand();
+        
+        double t1 = get_time(arr, x, 1);
+        double t2 = get_time(arr, x, 2);
+        double t3 = get_time(arr, x, 3);
+        
+        printf("%d\t%.3f\t%.3f\t\t%.3f\n", n, t1, t2, t3);
+        
+        free(arr);
+    }
+    
+    return 0;
+}
