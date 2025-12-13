@@ -20,7 +20,7 @@ void bub(int *a, int x) {
 void sel(int *a, int x) {
     for (int i = 0; i < x - 1; i++) {
         int min = i;
-        for (int j = i + 1; j < n; j++)
+        for (int j = i + 1; j < x; j++)
             if (a[j] < a[min]) min = j;
         if (min != i) {
             int t = a[i];
@@ -59,7 +59,7 @@ double get_time(int *arr, int x, int type) {
     clock_t start = clock();
     if (type == 1) bub(tmp, x);
     else if (type == 2) sel(tmp, x);
-    else q(tmp, 0, n - 1);
+    else q(tmp, 0, x - 1);
     clock_t end = clock();
     
     free(tmp);
@@ -84,7 +84,7 @@ int main() {
         double t2 = get_time(arr, x, 2);
         double t3 = get_time(arr, x, 3);
         
-        printf("%d\t%.3f\t%.3f\t\t%.3f\n", n, t1, t2, t3);
+        printf("%d\t%.3f\t%.3f\t\t%.3f\n", x, t1, t2, t3);
         
         free(arr);
     }
